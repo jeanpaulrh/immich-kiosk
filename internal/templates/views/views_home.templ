@@ -78,6 +78,9 @@ templ Home(viewData common.ViewData, secret string) {
 							}
 						</div>
 					</section>
+					if viewData.Calendar.URL != "" {
+						@partials.CalendarContainer(viewData.Theme, viewData.Calendar.UpdateInterval)
+					}
 				}
 				if !viewData.DisableNavigation {
 					@partials.Menu(viewData, viewData.Queries, secret)

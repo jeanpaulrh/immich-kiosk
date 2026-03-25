@@ -146,6 +146,18 @@ type KioskSettings struct {
 	DemoMode bool `json:"-" yaml:"-" mapstructure:"demo_mode" default:"false"`
 }
 
+// CalendarConfig holds settings for the ICS calendar overlay.
+type CalendarConfig struct {
+	// URL the public ICS calendar URL to fetch events from
+	URL string `yaml:"url" mapstructure:"url"`
+	// MaxEvents maximum number of upcoming events to show (0 = no limit)
+	MaxEvents int `yaml:"max_events" mapstructure:"max_events" default:"5"`
+	// UpdateInterval interval in seconds between calendar refreshes
+	UpdateInterval int `yaml:"update_interval" mapstructure:"update_interval" default:"3600"`
+	// DaysAhead number of days ahead to include events for
+	DaysAhead int `yaml:"days_ahead" mapstructure:"days_ahead" default:"7"`
+}
+
 type WeatherConfig struct {
 	// Locations A list of locations to fetch and display weather data from. Each location
 	Locations []WeatherLocation `json:"locations" yaml:"locations" mapstructure:"locations" default:"[]"`
@@ -464,6 +476,8 @@ type Config struct {
 	QrCodeOpenInApp bool `json:"qrCodeOpenInApp" yaml:"qr_code_open_in_app" mapstructure:"qr_code_open_in_app" query:"qr_code_open_in_app" form:"qr_code_open_in_app" default:"true"`
 
 	Weather WeatherConfig `json:"weather" yaml:"weather" mapstructure:"weather"`
+
+	Calendar CalendarConfig `json:"calendar" yaml:"calendar" mapstructure:"calendar"`
 
 	Iframe []string `json:"iframe" yaml:"iframe" mapstructure:"iframe" query:"iframe" form:"iframe" default:"[]"`
 

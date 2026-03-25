@@ -1,0 +1,65 @@
+/* --- calendar overlay --- */
+#calendar-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: var(--z-clock);
+    pointer-events: none;
+    transition: opacity var(--burn-in-fade) ease-in-out;
+    opacity: 1;
+}
+
+.calendar {
+    color: #fff;
+    text-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.6);
+    padding: 1rem 1.5rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 1rem;
+    max-width: 40vw;
+}
+
+@media screen and (max-width: 31.25rem) {
+    .calendar {
+        padding: 0.5rem;
+        max-width: 60vw;
+    }
+}
+
+.calendar--event {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.calendar--event--date {
+    font-size: 0.8rem;
+    opacity: 0.75;
+    text-transform: capitalize;
+}
+
+.calendar--event--title {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.calendar--event--location {
+    font-size: 0.75rem;
+    opacity: 0.65;
+}
+
+.burn-in-dim #calendar-container {
+    opacity: var(--burn-in-opacity);
+}
+
+.sleep #calendar-container {
+    display: none;
+}
+
+.polling-paused.more-info,
+.polling-paused.redirects-open {
+    #calendar-container {
+        opacity: 0.2;
+    }
+}

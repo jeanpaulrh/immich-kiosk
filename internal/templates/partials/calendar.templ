@@ -1,0 +1,82 @@
+package partials
+
+import (
+	"fmt"
+	"github.com/damongolding/immich-kiosk/internal/calendar"
+	"github.com/goodsign/monday"
+	"time"
+)
+
+// calendarEventDate formats the date/time of an event for display.
+// For today's events, it returns just the time (or "All day").
+// For other days, it returns the weekday name + date + time.
+func calendarEventDate(event calendar.Event, lang monday.Locale) string {
+	now := time.Now()
+	todayStart := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+	tomorrowStart := todayStart.Add(24 * time.Hour)
+
+	eventStart := event.Start
+	// Normalise all-day events to local time for comparison
+	if event.AllDay {
+		eventStart = time.Date(event.Start.Year(), event.Start.Month(), event.Start.Day(), 0, 0, 0, 0, now.Location())
+	}
+
+	eventDay := time.Date(eventStart.Year(), eventStart.Month(), eventStart.Day(), 0, 0, 0, 0, now.Location())
+	isToday := eventDay.Equal(todayStart)
+	isTomorrow := eventDay.Equal(tomorrowStart)
+
+	if event.AllDay {
+		switch {
+		case isToday:
+			return monday.Format(event.Start, "2 Jan", lang)
+		case isTomorrow:
+			return monday.Format(event.Start, "Mon 2 Jan", lang)
+		default:
+			return monday.Format(event.Start, "Mon 2 Jan", lang)
+		}
+	}
+
+	timeStr := event.Start.Format("15:04")
+	switch {
+	case isToday:
+		return timeStr
+	case isTomorrow:
+		return monday.Format(event.Start, "Mon", lang) + " " + timeStr
+	default:
+		return monday.Format(event.Start, "Mon 2 Jan", lang) + " " + timeStr
+	}
+}
+
+// CalendarEvents renders upcoming calendar events as HTML (returned by POST /calendar).
+templ CalendarEvents(events []calendar.Event, lang monday.Locale) {
+	if len(events) > 0 {
+		<div class="calendar">
+			for _, event := range events {
+				<div class="calendar--event">
+					<div class="calendar--event--date">{ calendarEventDate(event, lang) }</div>
+					<div class="calendar--event--title">{ event.Title }</div>
+					if event.Location != "" {
+						<div class="calendar--event--location">{ event.Location }</div>
+					}
+				</div>
+			}
+		</div>
+	}
+}
+
+// CalendarContainer renders the HTMX container that polls POST /calendar for updates.
+templ CalendarContainer(theme string, updateInterval int) {
+	{{
+		interval := updateInterval
+		if interval <= 0 {
+			interval = 3600
+		}
+	}}
+	<div
+		id="calendar-container"
+		class={ fmt.Sprintf("calendar--theme-%s", theme) }
+		hx-post="/calendar"
+		hx-swap="innerHTML"
+		hx-trigger={ fmt.Sprintf("load, every %ds", interval) }
+	></div>
+}
