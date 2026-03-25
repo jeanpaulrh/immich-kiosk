@@ -370,6 +370,34 @@
       "default": false,
       "description": "When enabled, image link buttons will open assets via the Immich app (my.immich.app)"
     },
+    "calendar": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "Public ICS calendar URL to fetch events from"
+        },
+        "max_events": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 5,
+          "description": "Maximum number of upcoming events to display"
+        },
+        "update_interval": {
+          "type": "integer",
+          "minimum": 60,
+          "default": 3600,
+          "description": "Interval in seconds between calendar refreshes"
+        },
+        "days_ahead": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 7,
+          "description": "Number of days ahead to include events for"
+        }
+      }
+    },
     "weather": {
       "type": "object",
       "additionalProperties": false,
