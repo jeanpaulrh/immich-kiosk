@@ -2,7 +2,7 @@
 #calendar-container {
     position: absolute;
     bottom: 0;
-    left: 0;
+    right: 0;
     z-index: var(--z-clock);
     pointer-events: none;
     transition: opacity var(--burn-in-fade) ease-in-out;
@@ -12,12 +12,14 @@
 .calendar {
     color: #fff;
     text-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.6);
-    padding: 1rem 1.5rem 1rem 1rem;
+    padding: 1rem 1rem 1rem 1.5rem;
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
     gap: 0.5rem;
     font-size: 1rem;
     max-width: 40vw;
+    text-align: right;
 }
 
 @media screen and (max-width: 31.25rem) {
