@@ -256,10 +256,10 @@ func parseDatetime(value, params string) (time.Time, bool, error) {
 		return t, true, err
 	}
 
-	// UTC (ends with Z)
+	// UTC (ends with Z) — convert to local timezone for display
 	if strings.HasSuffix(value, "Z") {
 		t, err := time.Parse("20060102T150405Z", value)
-		return t, false, err
+		return t.In(time.Local), false, err
 	}
 
 	// Timezone-aware
